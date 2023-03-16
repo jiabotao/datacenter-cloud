@@ -1,0 +1,8 @@
+# Project exclude paths
+/datacenter-api/datacenter-system-api/target/
+/datacenter-common/datacenter-common-core/target/
+/datacenter-common/datacenter-common-security/target/
+/datacenter-modules/datacenter-auth/target/
+/datacenter-modules/datacenter-gateway/target/
+/datacenter-modules/datacenter-kafka-manager/target/
+/datacenter-modules/datacenter-system/target/
