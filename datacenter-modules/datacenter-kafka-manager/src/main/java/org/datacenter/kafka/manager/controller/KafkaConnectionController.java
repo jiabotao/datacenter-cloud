@@ -53,7 +53,7 @@ public class KafkaConnectionController {
         if(topicName==null){
             return R.fail("请填写topic名称");
         }
-        boolean created = createTopic(bootstrap_servers,topicName,1,(short)1);
+        boolean created = createTopic(bootstrap_servers,topicName,1,(short)3);
         return R.ok(created);
 
     }
