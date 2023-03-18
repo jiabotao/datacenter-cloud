@@ -1,5 +1,7 @@
 package org.datacenter.kafka.manager.domain;
 
+import java.util.List;
+
 /**
  * @author liuxiaoxi
  */
@@ -8,15 +10,33 @@ public class PartitionInfo {
 
     private Integer partition;
 
-    private String host;
 
-    private Integer port;
+    private String leaderHost;
 
-    private Boolean isr;
+    private Integer leaderPort;
+
+
+    private List<String> isr;
 
     private Long offset;
 
     private Long endOffset;
+
+    public String getLeaderHost() {
+        return leaderHost;
+    }
+
+    public void setLeaderHost(String leaderHost) {
+        this.leaderHost = leaderHost;
+    }
+
+    public Integer getLeaderPort() {
+        return leaderPort;
+    }
+
+    public void setLeaderPort(Integer leaderPort) {
+        this.leaderPort = leaderPort;
+    }
 
     public Integer getPartition() {
         return partition;
@@ -26,27 +46,11 @@ public class PartitionInfo {
         this.partition = partition;
     }
 
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public Integer getPort() {
-        return port;
-    }
-
-    public void setPort(Integer port) {
-        this.port = port;
-    }
-
-    public Boolean getIsr() {
+    public List<String> getIsr() {
         return isr;
     }
 
-    public void setIsr(Boolean isr) {
+    public void setIsr(List<String> isr) {
         this.isr = isr;
     }
 

@@ -2,6 +2,10 @@ spring:
   application:
     name: datacenter-kafka-manager
   jackson:
+    visibility:
+      field: any
+      getter: none
+      setter: none
     serialization:
       FAIL_ON_EMPTY_BEANS: false
   profiles:

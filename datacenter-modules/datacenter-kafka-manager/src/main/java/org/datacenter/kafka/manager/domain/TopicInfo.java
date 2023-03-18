@@ -3,18 +3,21 @@ package org.datacenter.kafka.manager.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * @author liuxiaoxi
+ */
 public class TopicInfo implements Serializable {
 
-    private String topicName;
+    private String Name;
 
     private ArrayList<PartitionInfo> partitionInfoArrayList;
 
     public String getTopicName() {
-        return topicName;
+        return Name;
     }
 
     public void setTopicName(String topicName) {
-        this.topicName = topicName;
+        this.Name = topicName;
     }
 
     public ArrayList<PartitionInfo> getPartitionInfoArrayList() {

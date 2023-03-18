@@ -4,7 +4,10 @@ import com.alibaba.nacos.shaded.com.google.common.collect.Lists;
 import org.apache.kafka.clients.admin.*;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.KafkaFuture;
+import org.apache.kafka.common.Node;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.TopicPartitionInfo;
+import org.datacenter.kafka.manager.domain.PartitionInfo;
 
 import java.util.*;
 
@@ -85,6 +88,52 @@ public class KafkaUtil {
         consumer.seekToEnd(Arrays.asList(topicPartition));
         long endOffset = consumer.position(topicPartition);
         return endOffset;
+    }
+
+    public static void getKafkaInfo(String bootstrapServers){
+        Properties properties = new Properties();
+        properties.put("bootstrap.servers", bootstrapServers);
+        AdminClient adminClient = KafkaAdminClient.create(properties);
+        //ListConsumerGroupOffsetsResult listConsumerGroupOffsetsResult = adminClient.listConsumerGroupOffsets(groupId);
+        ListTopicsResult listTopicsResult = adminClient.listTopics();
+        KafkaFuture<Set<String>> kafkaFutureNames = listTopicsResult.names();
+        try{
+            Set<String> topicNameSet =  kafkaFutureNames.get();
+            DescribeTopicsResult describeTopicsResult = adminClient.describeTopics(topicNameSet);
+            Map<String, KafkaFuture<TopicDescription>> result = describeTopicsResult.topicNameValues();
+            Set<String> keySet = result.keySet();
+            for(String key:keySet){
+                KafkaFuture<TopicDescription> feature = result.get(key);
+                TopicDescription topicDescription = feature.get();
+                String topicName = topicDescription.name();
+                List<TopicPartitionInfo> topicPartitionInfoList = topicDescription.partitions();
+
+                for(TopicPartitionInfo topicPartitionInfo:topicPartitionInfoList){
+                    PartitionInfo partitionInfo = new PartitionInfo();
+
+                    Node leader = topicPartitionInfo.leader();
+                    String leaderhost = leader.host();
+                    Integer leaderPort = leader.port();
+                    partitionInfo.setLeaderHost(leaderhost);
+                    partitionInfo.setLeaderPort(leaderPort);
+                    partitionInfo.setPartition(topicPartitionInfo.partition());
+                    List<Node> isrNodes = topicPartitionInfo.isr();
+                    for(Node isrNode : isrNodes){
+                        String isrNodeHost = isrNode.host();
+                        Integer isrNodePort = isrNode.port();
+
+                    }
+
+                }
+
+                System.out.println(key+":"+feature.get().toString());
+            }
+
+        }catch (Exception e){
+
+        }
+
+
     }
 
 
