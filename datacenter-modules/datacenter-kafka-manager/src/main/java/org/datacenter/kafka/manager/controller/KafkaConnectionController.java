@@ -37,9 +37,13 @@ public class KafkaConnectionController {
 
     @PostMapping("/deleteTopic")
     public R deleteTopic(@RequestBody Map<String,Set<String>> params){
-        String brokerList =  "localhost:9092";
+        String bootstrapServers =  "localhost:9092";
         Set<String> topicNameSet = params.getOrDefault("topicNames",new HashSet<>());
-        boolean deleted = deleteTopic(brokerList,topicNameSet);
+
+        Properties properties = new Properties();
+        properties.put("bootstrap.servers", bootstrapServers);
+
+        boolean deleted = deleteTopic(bootstrapServers,topicNameSet);
         return R.ok(deleted);
 
     }
