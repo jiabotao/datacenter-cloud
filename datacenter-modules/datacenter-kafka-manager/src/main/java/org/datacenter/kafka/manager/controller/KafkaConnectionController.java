@@ -43,8 +43,21 @@ public class KafkaConnectionController {
         Properties properties = new Properties();
         properties.put("bootstrap.servers", bootstrapServers);
 
-        boolean deleted = deleteTopic(bootstrapServers,topicNameSet);
-        return R.ok(deleted);
+        AdminClient adminClient = null;
+        boolean deleteResult = false;
+        try {
+            adminClient =  KafkaAdminClient.create(properties);
+            DeleteTopicsResult deleted = adminClient.deleteTopics(topicNameSet);
+            deleted.all().get();
+            deleteResult = true;
+        } catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(adminClient != null){
+                adminClient.close();
+            }
+        }
+        return R.ok(deleteResult);
 
     }
 
@@ -114,24 +127,6 @@ public class KafkaConnectionController {
         return true;
     }
 
-    public boolean deleteTopic(String bootstrapServers, Set<String> topicNameSet){
-        Properties properties = new Properties();
-        properties.put("bootstrap.servers", bootstrapServers);
-        AdminClient adminClient = null;
-        try {
-            adminClient =  KafkaAdminClient.create(properties);
-            DeleteTopicsResult deleted = adminClient.deleteTopics(topicNameSet);
-            deleted.all().get();
-            return true;
-        } catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            if(adminClient != null){
-                adminClient.close();
-            }
-        }
-        return false;
-    }
 
 
 }
