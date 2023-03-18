@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 
 @RestController
-@RequestMapping("/kafka")
+@RequestMapping("/kafka/topic")
 public class KafkaConnectionController {
 
     @PostMapping("/listTopics")
