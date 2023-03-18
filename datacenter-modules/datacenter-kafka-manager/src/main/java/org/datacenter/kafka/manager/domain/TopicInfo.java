@@ -1,13 +1,11 @@
 package org.datacenter.kafka.manager.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class TopicInfo {
+public class TopicInfo implements Serializable {
 
     private String topicName;
-
-    private ArrayList<TopicPartitionInfo> topicPartitionInfoList;
-
 
 
 }

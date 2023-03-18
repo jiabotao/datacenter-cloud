@@ -1,6 +1,9 @@
 spring:
   application:
     name: datacenter-kafka-manager
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
   profiles:
     active: dev
   cloud:

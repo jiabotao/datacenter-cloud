@@ -5,6 +5,8 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
 import org.datacenter.common.core.domain.http.R;
+import org.datacenter.kafka.manager.domain.TopicInfo;
+import org.datacenter.kafka.manager.utils.KafkaUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +63,7 @@ public class OffSetController {
                 System.out.println(key);
                 Map<TopicPartition, OffsetAndMetadata> topicPartitionMap = consumerGroupOffsetsResultMap.get(key);
                 for(TopicPartition topicPartition:topicPartitionMap.keySet()){
-                    System.out.println(getLogEndOffset(default_bootstrap_servers,topicPartition));
+                    System.out.println(KafkaUtil.getLogEndOffset(default_bootstrap_servers,topicPartition));
                 }
             }
 
@@ -73,19 +75,12 @@ public class OffSetController {
         }
     }
 
-    public static long getLogEndOffset(String bootstrapServers, TopicPartition topicPartition){
-
-        Properties props = new Properties();
-
-        // 必须设置的属性
-        props.put("bootstrap.servers", bootstrapServers);
-        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-
-        KafkaConsumer<String, String> consumer= new KafkaConsumer<>(props);
-        consumer.assign(Arrays.asList(topicPartition));
-        consumer.seekToEnd(Arrays.asList(topicPartition));
-        long endOffset = consumer.position(topicPartition);
-        return endOffset;
+    @PostMapping("/testTopicDetail")
+    public R testTopicDetail(){
+        TopicInfo description = new TopicInfo();
+        description.setTopicName("asdsad");
+        return R.ok(description);
     }
+
+
 }
