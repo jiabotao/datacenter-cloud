@@ -4,6 +4,7 @@ import com.alibaba.nacos.shaded.com.google.common.collect.Lists;
 import org.apache.kafka.clients.admin.*;
 import org.apache.kafka.common.KafkaFuture;
 import org.datacenter.common.core.domain.http.R;
+import org.datacenter.kafka.manager.utils.KafkaUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,20 +20,8 @@ public class KafkaConnectionController {
     public R listTopics(@RequestBody Map<String,String> params){
         String default_bootstrap_servers=  "localhost:9092";
         String bootstrap_servers = params.getOrDefault("bootstrap.servers",default_bootstrap_servers);
-        Properties props = new Properties();
-        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrap_servers);
-        props.put(AdminClientConfig.REQUEST_TIMEOUT_MS_CONFIG, 30000);
-        AdminClient client = AdminClient.create(props);
-        ListTopicsResult listTopicsResult = client.listTopics();
-        KafkaFuture<Set<String>> kafkaFutureTopicNames = listTopicsResult.names();
-        try{
-            Set<String> topicNameSet = kafkaFutureTopicNames.get();
-            return R.ok(topicNameSet);
-        }catch (Exception e){
-            return R.fail(e.getMessage());
-        }finally {
-            client.close();
-        }
+        Set<String> topicNameSet  = KafkaUtil.listTopics(bootstrap_servers);
+        return R.ok(topicNameSet);
     }
 
     @PostMapping("/deleteTopic")
